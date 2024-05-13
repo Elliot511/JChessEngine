@@ -1,4 +1,4 @@
-package piece;
+package org.jchessengine.piece;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -6,11 +6,8 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.example.BoardDisplay;
+import org.jchessengine.BoardDisplay;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.Objects;
 
 public class Piece {

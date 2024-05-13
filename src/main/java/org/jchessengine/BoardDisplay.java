@@ -1,13 +1,20 @@
-package org.example;
+package org.jchessengine;
 
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import piece.*;
+import org.jchessengine.piece.Bishop;
+import org.jchessengine.piece.King;
+import org.jchessengine.piece.Knight;
+import org.jchessengine.piece.Pawn;
+import org.jchessengine.piece.Piece;
+import org.jchessengine.piece.Queen;
+import org.jchessengine.piece.Rook;
 
 import java.util.ArrayList;
 
@@ -17,7 +24,9 @@ public class BoardDisplay {
 
     private final int tileSize = 10000;
 
-    private ArrayList<Piece> pieces = new ArrayList<>();
+    private final MouseController mouseController = new MouseController();
+
+    private  ArrayList<Piece> pieces = new ArrayList<>();
 
     public void start(Stage primaryStage) {
         GridPane gridPane = new GridPane();
@@ -25,6 +34,7 @@ public class BoardDisplay {
             for (int col = 0; col < 8; col++) {
                 Rectangle square = new Rectangle(Math.sqrt(tileSize), Math.sqrt(tileSize),
                         (row + col) % 2 == 0 ? Color.BEIGE : Color.BURLYWOOD);
+                mouseController.handleTileClicks(square, col, row, gridPane);
                 gridPane.add(square, col, row);
             }
         }
@@ -62,7 +72,9 @@ public class BoardDisplay {
         }
 
         for (Piece piece : pieces) {
-            gridPane.add(piece.spawn(), piece.getCol(), piece.getRow());
+            ImageView pieceImgView = piece.spawn();
+            mouseController.addClickMove(pieceImgView, gridPane);
+            gridPane.add(pieceImgView, piece.getCol(), piece.getRow());
         }
     }
 

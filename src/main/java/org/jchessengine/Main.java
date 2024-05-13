@@ -1,4 +1,4 @@
-package org.example;
+package org.jchessengine;
 
 import javafx.application.Application;
 import javafx.stage.Stage;

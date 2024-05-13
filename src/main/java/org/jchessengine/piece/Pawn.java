@@ -1,6 +1,6 @@
-package piece;
+package org.jchessengine.piece;
 
-import org.example.BoardDisplay;
+import org.jchessengine.BoardDisplay;
 
 public class Pawn extends Piece {
     public Pawn(BoardDisplay board, int col, int row, boolean isWhite) {

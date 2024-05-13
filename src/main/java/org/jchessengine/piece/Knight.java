@@ -1,6 +1,6 @@
-package piece;
+package org.jchessengine.piece;
 
-import org.example.BoardDisplay;
+import org.jchessengine.BoardDisplay;
 
 public class Knight extends Piece{
 
