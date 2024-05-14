@@ -46,6 +46,9 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>org.jchessengine.Main</mainClass>
+                    <options>
+                        <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005</option>
+                    </options>
                 </configuration>
             </plugin>
         </plugins>

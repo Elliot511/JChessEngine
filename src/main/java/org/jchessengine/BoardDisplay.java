@@ -1,8 +1,10 @@
 package org.jchessengine;
 
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -24,6 +26,8 @@ public class BoardDisplay {
 
     private final int tileSize = 10000;
 
+    private final StackPane[][] stackPanes = new StackPane[8][8];
+
     private final MouseController mouseController = new MouseController();
 
     private  ArrayList<Piece> pieces = new ArrayList<>();
@@ -32,10 +36,13 @@ public class BoardDisplay {
         GridPane gridPane = new GridPane();
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
+                StackPane stackPane = new StackPane();
                 Rectangle square = new Rectangle(Math.sqrt(tileSize), Math.sqrt(tileSize),
                         (row + col) % 2 == 0 ? Color.BEIGE : Color.BURLYWOOD);
-                mouseController.handleTileClicks(square, col, row, gridPane);
-                gridPane.add(square, col, row);
+                mouseController.addClickMove(stackPane, col, row);
+                stackPane.getChildren().add(square);
+                gridPane.add(stackPane, col, row);
+                stackPanes[row][col] = stackPane;
             }
         }
         Scene scene = new Scene(gridPane, 800, 800);
@@ -73,8 +80,14 @@ public class BoardDisplay {
 
         for (Piece piece : pieces) {
             ImageView pieceImgView = piece.spawn();
-            mouseController.addClickMove(pieceImgView, gridPane);
-            gridPane.add(pieceImgView, piece.getCol(), piece.getRow());
+            pieceImgView.setUserData(piece);
+
+            StackPane stackPane = stackPanes[piece.getRow()][piece.getCol()];
+            if (stackPane != null) {
+                stackPane.getChildren().add(pieceImgView);
+                mouseController.addClickMove(stackPane, piece.getCol(), piece.getRow());
+            }
+            //gridPane.add(pieceImgView, piece.getCol(), piece.getRow());
         }
     }
 
