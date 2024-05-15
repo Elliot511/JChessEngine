@@ -6,6 +6,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jchessengine.util.BoardUtil;
+import org.jchessengine.util.StackPaneUtil;
 
 import java.util.Optional;
 
@@ -15,9 +17,7 @@ public class MouseController {
 
     private StackPane selectedTile = null;
 
-    private Rectangle currentlySelectedTile = null;
-
-    public void addClickMove(StackPane stackPane, int col, int row) {
+    public void addClickMove(StackPane stackPane) {
         stackPane.setOnMouseClicked(
                 mouseEvent -> {
                     Optional<ImageView> maybePiece = stackPane.getChildren().stream()
@@ -26,13 +26,20 @@ public class MouseController {
                             .map(ImageView.class::cast);
 
                     if (maybePiece.isPresent()) { // Piece clicked
-                        if (selectedTile == null) {
+                        if (selectedTile == null) { // Piece selected
                             selectedTile = stackPane;
                             BoardUtil.paintSelectedTile(StackPaneUtil.getRectangleFromTile(stackPane));
                             LOGGER.info("Selected piece at col: {} row: {}", GridPane.getColumnIndex(maybePiece.get()),
                                     GridPane.getRowIndex(maybePiece.get()));
                         }
                         else {
+                            if (stackPane.equals(selectedTile)) { // Deselecting tile
+                                BoardUtil.unpaintSelectedTile(StackPaneUtil.getRectangleFromTile(selectedTile),
+                                        GridPane.getColumnIndex(selectedTile), GridPane.getRowIndex(selectedTile));
+                                selectedTile = null;
+                                return;
+                            }
+                            // Capturing piece
                             BoardUtil.unpaintSelectedTile(StackPaneUtil.getRectangleFromTile(selectedTile),
                                     GridPane.getColumnIndex(selectedTile), GridPane.getRowIndex(selectedTile));
                             capturePiece(stackPane);

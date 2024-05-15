@@ -1,6 +1,5 @@
 package org.jchessengine;
 
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -39,7 +38,7 @@ public class BoardDisplay {
                 StackPane stackPane = new StackPane();
                 Rectangle square = new Rectangle(Math.sqrt(tileSize), Math.sqrt(tileSize),
                         (row + col) % 2 == 0 ? Color.BEIGE : Color.BURLYWOOD);
-                mouseController.addClickMove(stackPane, col, row);
+                mouseController.addClickMove(stackPane);
                 stackPane.getChildren().add(square);
                 gridPane.add(stackPane, col, row);
                 stackPanes[row][col] = stackPane;
@@ -85,9 +84,8 @@ public class BoardDisplay {
             StackPane stackPane = stackPanes[piece.getRow()][piece.getCol()];
             if (stackPane != null) {
                 stackPane.getChildren().add(pieceImgView);
-                mouseController.addClickMove(stackPane, piece.getCol(), piece.getRow());
+                mouseController.addClickMove(stackPane);
             }
-            //gridPane.add(pieceImgView, piece.getCol(), piece.getRow());
         }
     }
 

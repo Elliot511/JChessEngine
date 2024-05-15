@@ -1,4 +1,4 @@
-package org.jchessengine;
+package org.jchessengine.util;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
