@@ -51,6 +51,8 @@ public class MouseController {
                             BoardUtil.unpaintSelectedTile(StackPaneUtil.getRectangleFromTile(selectedTile),
                                     GridPane.getColumnIndex(selectedTile), GridPane.getRowIndex(selectedTile));
                             if (validateMove(stackPane, maybePiece)) {
+                                BoardUtil.checkAndSetBecomesEnPassantable(gameStateController, stackPane,
+                                        selectedTile, StackPaneUtil.getPieceFromTile(selectedTile));
                                 capturePiece(stackPane);
                             }
                             else {
@@ -63,6 +65,8 @@ public class MouseController {
                             BoardUtil.unpaintSelectedTile(StackPaneUtil.getRectangleFromTile(selectedTile),
                                     GridPane.getColumnIndex(selectedTile), GridPane.getRowIndex(selectedTile));
                             if (validateMove(stackPane, Optional.empty())) {
+                                BoardUtil.checkAndSetBecomesEnPassantable(gameStateController, stackPane,
+                                        selectedTile, StackPaneUtil.getPieceFromTile(selectedTile));
                                 movePiece(stackPane, false);
                             }
                             else {
@@ -76,7 +80,6 @@ public class MouseController {
 
     private void movePiece(StackPane newTile, boolean hasCaptured) {
         ImageView piece = StackPaneUtil.getPieceFromTile(selectedTile);
-        BoardUtil.checkAndSetBecomesEnPassantable(gameStateController, newTile, selectedTile, piece);
         newTile.getChildren().add(piece);
         StackPaneUtil.removePieceFromTile(selectedTile);
         if (!hasCaptured) {
@@ -86,8 +89,6 @@ public class MouseController {
     }
 
     private void capturePiece(StackPane newTile) {
-        ImageView piece = StackPaneUtil.getPieceFromTile(selectedTile);
-        BoardUtil.checkAndSetBecomesEnPassantable(gameStateController, newTile, selectedTile, piece);
         StackPaneUtil.removePieceFromTile(newTile);
         movePiece(newTile, true);
         selectedTile = null;
