@@ -1,6 +1,9 @@
 package org.jchessengine.piece;
 
+import javafx.scene.image.ImageView;
 import org.jchessengine.BoardDisplay;
+
+import java.util.Optional;
 
 public class King extends Piece {
     public King(BoardDisplay board, int col, int row, boolean isWhite) {
@@ -12,5 +15,10 @@ public class King extends Piece {
         this.row = row;
 
         this.sprite = getSprite(0, isWhite ? 0 : spriteMapScale, spriteMapScale, spriteMapScale);
+    }
+
+    @Override
+    public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
+        return false;
     }
 }

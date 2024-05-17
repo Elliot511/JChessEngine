@@ -9,8 +9,9 @@ import org.apache.logging.log4j.Logger;
 import org.jchessengine.BoardDisplay;
 
 import java.util.Objects;
+import java.util.Optional;
 
-public class Piece {
+public abstract class Piece {
 
     private static final Logger LOGGER = LogManager.getLogger(Piece.class);
 
@@ -58,6 +59,8 @@ public class Piece {
         isWhite = white;
     }
 
+    public abstract boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow);
+
     public int getCol() {
         return col;
     }
@@ -72,5 +75,9 @@ public class Piece {
 
     public void setRow(int row) {
         this.row = row;
+    }
+
+    public BoardDisplay getBoard() {
+        return board;
     }
 }

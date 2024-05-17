@@ -27,7 +27,9 @@ public class BoardDisplay {
 
     private final StackPane[][] stackPanes = new StackPane[8][8];
 
-    private final MouseController mouseController = new MouseController();
+    private final GameStateController gameStateController = new GameStateController();
+
+    private final MouseController mouseController = new MouseController(gameStateController);
 
     private  ArrayList<Piece> pieces = new ArrayList<>();
 
@@ -93,4 +95,7 @@ public class BoardDisplay {
         return tileSize;
     }
 
+    public GameStateController getGameStateController() {
+        return gameStateController;
+    }
 }
