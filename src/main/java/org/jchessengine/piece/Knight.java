@@ -20,9 +20,16 @@ public class Knight extends Piece{
 
     @Override
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
-        return false;
+        if (maybePiece.isPresent()) {
+            Piece piece = (Piece) maybePiece.get().getUserData();
+            if (piece.isWhite == this.isWhite) {
+                return false; // No team-killing allowed
+            }
+        }
+        if (Math.abs(newCol - currentCol) == 2 && Math.abs(currentRow - newRow) == 1) {
+            return true;
+        }
+        return Math.abs(newRow - currentRow) == 2 && Math.abs(currentCol - newCol) == 1;
     }
-
-
 
 }
