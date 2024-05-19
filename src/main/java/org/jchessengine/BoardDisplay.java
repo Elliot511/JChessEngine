@@ -31,7 +31,7 @@ public class BoardDisplay {
 
     private final MouseController mouseController = new MouseController(gameStateController);
 
-    private  ArrayList<Piece> pieces = new ArrayList<>();
+    private final ArrayList<Piece> pieces = new ArrayList<>();
 
     public void start(Stage primaryStage) {
         GridPane gridPane = new GridPane();
@@ -50,10 +50,10 @@ public class BoardDisplay {
         primaryStage.setTitle("JChessEngine");
         primaryStage.setScene(scene);
         primaryStage.show();
-        spawnPieces(gridPane);
+        spawnPieces();
     }
 
-    private void spawnPieces(GridPane gridPane) {
+    private void spawnPieces() {
         pieces.add(new Rook(this, 0, 0, false));
         pieces.add(new Rook(this, 0, 7, true));
         pieces.add(new Rook(this, 7, 0, false));
@@ -89,10 +89,6 @@ public class BoardDisplay {
                 mouseController.addClickMove(stackPane);
             }
         }
-    }
-
-    public int getTileSize() {
-        return tileSize;
     }
 
     public GameStateController getGameStateController() {

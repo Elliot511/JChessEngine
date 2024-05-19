@@ -1,6 +1,5 @@
 package org.jchessengine;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 import java.util.Optional;

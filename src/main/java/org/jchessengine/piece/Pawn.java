@@ -4,7 +4,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import org.jchessengine.BoardDisplay;
-import org.jchessengine.util.StackPaneUtil;
 
 import java.util.Optional;
 
@@ -33,7 +32,8 @@ public class Pawn extends Piece {
         if (canEnPassant(newCol, newRow, currentRow, direction)) {
             return true;
         }
-        return newCol == currentCol && newRow == currentRow + direction || (currentRow == row && newRow == currentRow + (direction * 2));
+        return newCol == currentCol && newRow == currentRow + direction ||
+                (currentRow == row && newRow == currentRow + (direction * 2));
     }
 
     public boolean canEnPassant(int newCol, int newRow, int currentRow, int direction) {

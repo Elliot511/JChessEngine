@@ -2,13 +2,9 @@ package org.jchessengine.piece;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import org.jchessengine.BoardDisplay;
-import org.jchessengine.util.BoardUtil;
 import org.jchessengine.util.StackPaneUtil;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class Bishop extends Piece {
@@ -33,10 +29,10 @@ public class Bishop extends Piece {
             }
         }
         try {
-            if (Math.abs(newCol - currentCol) / Math.abs(currentRow - newRow) == 1) { // Validated diagonal travel
+            if ((double) Math.abs(newCol - currentCol) / (double) Math.abs(currentRow - newRow) == 1) { // Validated diagonal travel
+                StackPane[][] panes = board.getStackPanes();
                 int directionCol = newCol > currentCol ? 1 : -1;
                 int directionRow = newRow > currentRow ? 1 : -1;
-                StackPane[][] panes = board.getStackPanes();
                 int colIter = currentCol + directionCol;
                 int rowIter = currentRow + directionRow;
                 while (colIter != newCol && rowIter != newRow) {
