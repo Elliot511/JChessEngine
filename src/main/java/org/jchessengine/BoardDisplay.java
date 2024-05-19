@@ -98,4 +98,8 @@ public class BoardDisplay {
     public GameStateController getGameStateController() {
         return gameStateController;
     }
+
+    public StackPane[][] getStackPanes() {
+        return stackPanes;
+    }
 }

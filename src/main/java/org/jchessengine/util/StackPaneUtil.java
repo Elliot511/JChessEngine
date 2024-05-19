@@ -20,6 +20,11 @@ public final class StackPaneUtil {
                 .orElseThrow(() -> new IllegalArgumentException("No piece to retrieve"));
     }
 
+    public static boolean doesTileHavePiece(StackPane stackPane) {
+        return stackPane.getChildren().stream()
+                .anyMatch(node -> node instanceof ImageView);
+    }
+
     /**
      * Removes a piece from the tile.
      *

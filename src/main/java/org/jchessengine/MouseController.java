@@ -39,8 +39,8 @@ public class MouseController {
                         if (selectedTile == null) { // Piece selected
                             selectedTile = stackPane;
                             BoardUtil.paintSelectedTile(StackPaneUtil.getRectangleFromTile(stackPane), Color.CRIMSON);
-                            LOGGER.info("Selected piece at col: {} row: {}", GridPane.getColumnIndex(maybePiece.get()),
-                                    GridPane.getRowIndex(maybePiece.get()));
+                            LOGGER.info("Selected piece at col: {} row: {}", GridPane.getColumnIndex(stackPane),
+                                    GridPane.getRowIndex(stackPane));
                         }
                         else {
                             if (stackPane.equals(selectedTile)) { // Deselecting tile
