@@ -94,6 +94,7 @@ public class MouseController {
     }
 
     private void capturePiece(StackPane newTile) {
+        BoardUtil.checkAndCaptureEnPassantableNormally(newTile, gameStateController);
         StackPaneUtil.removePieceFromTile(newTile);
         movePiece(newTile, true);
         selectedTile = null;

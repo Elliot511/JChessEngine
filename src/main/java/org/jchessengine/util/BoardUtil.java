@@ -61,4 +61,12 @@ public final class BoardUtil {
 
     }
 
+    public static void checkAndCaptureEnPassantableNormally(StackPane newTile, GameStateController gameStateController) {
+        if (gameStateController.getEnPassantablePiece().isPresent()) {
+            if (newTile.equals(gameStateController.getEnPassantablePiece().get())) {
+                gameStateController.setEnPassantablePiece(Optional.empty());
+            }
+        }
+    }
+
 }
