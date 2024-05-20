@@ -3,6 +3,7 @@ package org.jchessengine.piece;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import org.jchessengine.BoardDisplay;
+import org.jchessengine.MoveValidator;
 import org.jchessengine.util.StackPaneUtil;
 
 import java.util.Optional;
@@ -22,33 +23,7 @@ public class Bishop extends Piece {
 
     @Override
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
-        if (maybePiece.isPresent()) {
-            Piece piece = (Piece) maybePiece.get().getUserData();
-            if (piece.isWhite == this.isWhite) {
-                return false; // No team-killing allowed
-            }
-        }
-        try {
-            if ((double) Math.abs(newCol - currentCol) / (double) Math.abs(currentRow - newRow) == 1) { // Validated diagonal travel
-                StackPane[][] panes = board.getStackPanes();
-                int directionCol = newCol > currentCol ? 1 : -1;
-                int directionRow = newRow > currentRow ? 1 : -1;
-                int colIter = currentCol + directionCol;
-                int rowIter = currentRow + directionRow;
-                while (colIter != newCol && rowIter != newRow) {
-                    if (StackPaneUtil.doesTileHavePiece(panes[rowIter][colIter])) {
-                        return false;
-                    }
-                    colIter += directionCol;
-                    rowIter += directionRow;
-                }
-            }
-            else {
-                return false;
-            }
-        } catch (ArithmeticException e) {
-            return false;
-        }
-        return true;
+        return MoveValidator.validateNoTeamKill(maybePiece, this) &&
+                MoveValidator.validateBishopMovement(board, currentCol, currentRow, newCol, newRow);
     }
 }

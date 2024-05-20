@@ -2,6 +2,7 @@ package org.jchessengine.piece;
 
 import javafx.scene.image.ImageView;
 import org.jchessengine.BoardDisplay;
+import org.jchessengine.MoveValidator;
 
 import java.util.Optional;
 
@@ -20,16 +21,8 @@ public class Knight extends Piece{
 
     @Override
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
-        if (maybePiece.isPresent()) {
-            Piece piece = (Piece) maybePiece.get().getUserData();
-            if (piece.isWhite == this.isWhite) {
-                return false; // No team-killing allowed
-            }
-        }
-        if (Math.abs(newCol - currentCol) == 2 && Math.abs(currentRow - newRow) == 1) {
-            return true;
-        }
-        return Math.abs(newRow - currentRow) == 2 && Math.abs(currentCol - newCol) == 1;
+        return MoveValidator.validateNoTeamKill(maybePiece, this) &&
+                MoveValidator.validateKnightMovement(currentCol, currentRow, newCol, newRow);
     }
 
 }

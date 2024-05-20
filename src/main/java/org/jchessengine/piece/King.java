@@ -1,7 +1,9 @@
 package org.jchessengine.piece;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import org.jchessengine.BoardDisplay;
+import org.jchessengine.MoveValidator;
 
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ public class King extends Piece {
 
     @Override
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
-        return false;
+        return MoveValidator.validateNoTeamKill(maybePiece, this) &&
+                MoveValidator.validateKingMovement(currentCol, currentRow, newCol, newRow);
     }
 }
