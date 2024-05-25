@@ -14,6 +14,10 @@ public final class MoveValidator {
         //no-op
     }
 
+    public static boolean isTurn(Piece self) {
+        return self.getBoard().getGameStateController().isWhitesTurn() == self.isWhite();
+    }
+
     public static boolean validateNoTeamKill(Optional<ImageView> maybePiece, Piece self) {
         if (maybePiece.isPresent()) {
             Piece piece = (Piece) maybePiece.get().getUserData();

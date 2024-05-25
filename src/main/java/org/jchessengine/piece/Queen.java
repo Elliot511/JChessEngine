@@ -1,10 +1,8 @@
 package org.jchessengine.piece;
 
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import org.jchessengine.BoardDisplay;
 import org.jchessengine.MoveValidator;
-import org.jchessengine.util.StackPaneUtil;
 
 import java.util.Optional;
 

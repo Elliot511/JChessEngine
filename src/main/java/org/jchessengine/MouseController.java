@@ -91,6 +91,7 @@ public class MouseController {
             BoardUtil.captureEnPassantedPieceIfPossible(piece, newTile, gameStateController);
         }
         selectedTile = null;
+        gameStateController.setWhitesTurn(!((Piece) piece.getUserData()).isWhite());
     }
 
     private void capturePiece(StackPane newTile) {

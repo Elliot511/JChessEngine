@@ -1,8 +1,6 @@
 package org.jchessengine.piece;
 
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import org.jchessengine.BoardDisplay;
 import org.jchessengine.MoveValidator;
 
@@ -21,7 +19,8 @@ public class Pawn extends Piece {
     }
 
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
-        return MoveValidator.validatePawnMovement(board.getGameStateController(), maybePiece, currentCol,
+        return MoveValidator.isTurn(this) &&
+                MoveValidator.validatePawnMovement(board.getGameStateController(), maybePiece, currentCol,
                 currentRow, newCol, newRow, row, isWhite);
     }
 }

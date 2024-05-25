@@ -21,7 +21,8 @@ public class Knight extends Piece{
 
     @Override
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
-        return MoveValidator.validateNoTeamKill(maybePiece, this) &&
+        return MoveValidator.isTurn(this) &&
+                MoveValidator.validateNoTeamKill(maybePiece, this) &&
                 MoveValidator.validateKnightMovement(currentCol, currentRow, newCol, newRow);
     }
 
