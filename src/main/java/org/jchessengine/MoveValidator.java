@@ -3,7 +3,15 @@ package org.jchessengine;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import org.jchessengine.piece.Bishop;
+import org.jchessengine.piece.King;
+import org.jchessengine.piece.Knight;
+import org.jchessengine.piece.Pawn;
 import org.jchessengine.piece.Piece;
+import org.jchessengine.piece.Queen;
+import org.jchessengine.piece.Rook;
+import org.jchessengine.util.BoardUtil;
 import org.jchessengine.util.StackPaneUtil;
 
 import java.util.Optional;
@@ -121,6 +129,91 @@ public final class MoveValidator {
              *  b. If no enemy is found, the tile is valid to move to.
              */
             return true; // Add king blocks
+        }
+        return false;
+    }
+
+    public static boolean isAttackedTile(BoardDisplay board, Piece self, int newCol, int newRow) {
+        return isEnemyKnightPresent(board, self, newCol, newRow) ||
+                isEnemyRookPresent(board, self, newCol, newRow) ||
+                isEnemyBishopPresent(board, self, newCol, newRow) ||
+                isEnemyQueenPresent(board, self, newCol, newRow) ||
+                isEnemyPawnPresent(board, self, newCol, newRow) ||
+                isEnemyKingPresent(board, self, newCol, newRow);
+    }
+
+    public static boolean isEnemyPawnPresent(BoardDisplay board, Piece self, int newCol, int newRow) {
+        int direction = self.isWhite() ? -1 : 1;
+        int[][] potentialEnemyTiles = { {newCol + 1, newRow + direction}, {newCol - 1, newRow + direction} };
+        return checkNonSlidingEnemyPath(board, potentialEnemyTiles, self, Pawn.class, newCol, newRow);
+    }
+
+    public static boolean isEnemyKnightPresent(BoardDisplay board, Piece self, int newCol, int newRow) {
+        int[][] potentialEnemyTiles = { {newCol - 1, newRow - 2}, {newCol - 1, newRow + 2},
+                {newCol + 1, newRow - 2}, {newCol + 1, newRow + 2}, {newCol - 2, newRow -1}, {newCol - 2, newRow + 1},
+                {newCol + 2, newRow - 1}, {newCol + 2, newRow + 1} };
+        return checkNonSlidingEnemyPath(board, potentialEnemyTiles, self, Knight.class, newCol, newRow);
+    }
+
+    public static boolean isEnemyKingPresent(BoardDisplay board, Piece self, int newCol, int newRow) {
+        int[][] potentialEnemyTiles = { {newCol -1, newRow}, {newCol + 1, newRow}, {newCol , newRow - 1},
+                {newCol, newRow + 1}, {newCol - 1, newRow - 1}, {newCol + 1, newRow + 1},
+                {newCol + 1, newRow - 1}, {newCol - 1, newRow + 1} };
+        return checkNonSlidingEnemyPath(board, potentialEnemyTiles, self, King.class, newCol, newRow);
+    }
+
+    public static boolean isEnemyRookPresent(BoardDisplay board, Piece self, int newCol, int newRow) {
+        int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} }; // Directions of travel
+        return checkSlidingEnemyPath(board, directions, self, Rook.class, newCol, newRow);
+    }
+
+    public static boolean isEnemyBishopPresent(BoardDisplay board, Piece self, int newCol, int newRow) {
+        int[][] directions = { {-1, -1}, {1, 1}, {1, -1}, {-1, 1} }; // Directions of travel
+        return checkSlidingEnemyPath(board, directions, self, Bishop.class, newCol, newRow);
+    }
+
+    public static boolean isEnemyQueenPresent(BoardDisplay board, Piece self, int newCol, int newRow) {
+        int[][] directions = { {-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {1, 1}, {1, -1}, {-1, 1} }; // Directions of travel
+        return checkSlidingEnemyPath(board, directions, self, Queen.class, newCol, newRow);
+    }
+
+    private static boolean checkSlidingEnemyPath(BoardDisplay board, int[][] directions, Piece self,
+            Class<? extends Piece> enemyPieceType, int newCol, int newRow) {
+        StackPane[][] tiles = board.getStackPanes();
+        boolean isWhite = self.isWhite();
+        for (int[] direction : directions) {
+            int col = newCol;
+            int row = newRow;
+            while (BoardUtil.isInBounds(col, row)) {
+                col += direction[0];
+                row += direction[1];
+                if (!BoardUtil.isInBounds(col, row)) break;
+                StackPane tile = tiles[row][col];
+                if (StackPaneUtil.doesTileHavePiece(tile)) {
+                    Piece piece = ((Piece) StackPaneUtil.getPieceFromTile(tile).getUserData());
+                    if (piece.getClass() == enemyPieceType && piece.isWhite() != isWhite) {
+                        return true;
+                    }
+                    break; // Found piece, but it does not match, and blocks what we are looking for from attacking.
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean checkNonSlidingEnemyPath(BoardDisplay board, int[][] potentialEnemyTiles, Piece self,
+            Class<? extends Piece> enemyPieceType, int newCol, int newRow) {
+        StackPane[][] tiles = board.getStackPanes();
+        for (int[] potentialEnemyTile : potentialEnemyTiles) {
+            if (BoardUtil.isInBounds(potentialEnemyTile[0], potentialEnemyTile[1])) {
+                StackPane tile = tiles[potentialEnemyTile[1]][potentialEnemyTile[0]];
+                if (StackPaneUtil.doesTileHavePiece(tile)) {
+                    Piece piece = ((Piece) StackPaneUtil.getPieceFromTile(tile).getUserData());
+                    if (piece.getClass() == enemyPieceType && piece.isWhite() != self.isWhite()) {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }

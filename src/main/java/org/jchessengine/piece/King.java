@@ -22,6 +22,7 @@ public class King extends Piece {
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
         return MoveValidator.isTurn(this) &&
                 MoveValidator.validateNoTeamKill(maybePiece, this) &&
-                MoveValidator.validateKingMovement(currentCol, currentRow, newCol, newRow);
+                MoveValidator.validateKingMovement(currentCol, currentRow, newCol, newRow) &&
+                !MoveValidator.isAttackedTile(board, this, newCol, newRow);
     }
 }
