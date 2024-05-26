@@ -6,6 +6,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.jchessengine.GameStateController;
+import org.jchessengine.piece.King;
 import org.jchessengine.piece.Pawn;
 import org.jchessengine.piece.Piece;
 
@@ -71,6 +72,34 @@ public final class BoardUtil {
 
     public static boolean isInBounds(int col, int row) {
         return col >= 0 && col < 8 && row >= 0 && row < 8;
+    }
+
+    public static boolean isCastling(StackPane selectedTile, int col, int newCol) {
+        if (StackPaneUtil.getPieceFromTile(selectedTile).getUserData() instanceof King) {
+            return Math.abs(newCol - col) == 2;
+        }
+        return false;
+    }
+
+    /**
+     * Gets the rook that the king is trying to castle with
+     * @param piece
+     * @param col
+     * @param newCol
+     * @return returns an array of size two, where index zero is initial tile, and index one is the tile to move to
+     */
+    public static StackPane[] getCastlingRook(Piece piece, int col, int newCol) {
+        StackPane[][] tiles = piece.getBoard().getStackPanes();
+        StackPane[] ret = new StackPane[2];
+        if (newCol > col) { // Short castle
+            ret[0] = tiles[piece.isWhite() ? 7 : 0][7];
+            ret[1] = tiles[piece.isWhite() ? 7 : 0][5];
+        }
+        else { // Long castle
+            ret[0] = tiles[piece.isWhite() ? 7 : 0][0];
+            ret[1] = tiles[piece.isWhite() ? 7 : 0][3];
+        }
+        return ret;
     }
 
 }

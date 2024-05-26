@@ -6,6 +6,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jchessengine.piece.King;
 import org.jchessengine.piece.Piece;
 import org.jchessengine.util.BoardUtil;
 import org.jchessengine.util.StackPaneUtil;
@@ -84,6 +85,11 @@ public class MouseController {
     }
 
     private void movePiece(StackPane newTile, boolean hasCaptured) {
+        if (BoardUtil.isCastling(selectedTile, GridPane.getColumnIndex(selectedTile),
+                GridPane.getColumnIndex(newTile))) {
+            castleMove(newTile);
+            return;
+        }
         ImageView piece = StackPaneUtil.getPieceFromTile(selectedTile);
         newTile.getChildren().add(piece);
         StackPaneUtil.removePieceFromTile(selectedTile);
@@ -91,6 +97,20 @@ public class MouseController {
             BoardUtil.captureEnPassantedPieceIfPossible(piece, newTile, gameStateController);
         }
         selectedTile = null;
+        gameStateController.setWhitesTurn(!((Piece) piece.getUserData()).isWhite());
+    }
+
+    private void castleMove(StackPane newTile) {
+        ImageView piece = StackPaneUtil.getPieceFromTile(selectedTile);
+        newTile.getChildren().add(piece);
+        StackPaneUtil.removePieceFromTile(selectedTile);
+        StackPane[] rookPositions = BoardUtil.getCastlingRook(((Piece) piece.getUserData()),
+                GridPane.getColumnIndex(selectedTile), GridPane.getColumnIndex(newTile));
+        ImageView rook = StackPaneUtil.getPieceFromTile(rookPositions[0]);
+        rookPositions[1].getChildren().add(rook);
+        StackPaneUtil.removePieceFromTile(rookPositions[0]);
+        selectedTile = null;
+        ((King) piece.getUserData()).setCanCastle(false);
         gameStateController.setWhitesTurn(!((Piece) piece.getUserData()).isWhite());
     }
 

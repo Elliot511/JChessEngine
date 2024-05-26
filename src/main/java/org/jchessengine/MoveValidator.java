@@ -3,7 +3,6 @@ package org.jchessengine;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import org.jchessengine.piece.Bishop;
 import org.jchessengine.piece.King;
 import org.jchessengine.piece.Knight;
@@ -118,17 +117,38 @@ public final class MoveValidator {
         return false;
     }
 
-    public static boolean validateKingMovement(int currentCol, int currentRow, int newCol, int newRow) {
-        if (Math.abs(newRow - currentRow) <= 1 && Math.abs(newCol - currentCol) <= 1) {
-            //StackPane target = board.getStackPanes()[newCol][newRow];
-            /**
-             * TODO: Some kind of algorithm to check if target tile under attack.
-             * 1. Check existing enemy pieces (TODO: Add removal of pieces from list of pieces upon capture)
-             * 2. Use attack patterns of existing enemy pieces starting from the target tile.
-             *  a. If an enemy is found, the tile is under attack
-             *  b. If no enemy is found, the tile is valid to move to.
-             */
-            return true; // Add king blocks
+    public static boolean validateKingMovement(BoardDisplay board, Piece self, int currentCol, int currentRow,
+            int newCol, int newRow) {
+        // Castling?
+        if (((King) self).isCanCastle() && currentCol == self.getCol() && currentRow == self.getRow()
+                && Math.abs(newCol - currentCol) == 2) { // First move and castling
+            return validateCastling(board, self, currentCol, newCol);
+        }
+        return Math.abs(newRow - currentRow) <= 1 && Math.abs(newCol - currentCol) <= 1;
+    }
+
+    public static boolean validateCastling(BoardDisplay board, Piece self, int currentCol, int newCol) {
+        var tiles = board.getStackPanes();
+        if (newCol == currentCol + 2) { // Short castle
+            if (StackPaneUtil.doesTileHavePiece(tiles[self.isWhite() ? 7 : 0][7])) {
+                Piece rook = ((Piece) StackPaneUtil.getPieceFromTile(tiles[self.isWhite() ? 7 : 0][7]).getUserData());
+                if (rook.isWhite() == self.isWhite() && rook.getCol() == 7
+                        && rook.getRow() == (self.isWhite() ? 7 : 0)) { // Unmoved
+                    // TODO Validate no danger in path
+                    return true;
+                }
+            }
+            return false;
+        }
+        else if (newCol == currentCol - 2) { // Long castle
+            if (StackPaneUtil.doesTileHavePiece(tiles[self.isWhite() ? 7 : 0][0])) {
+                Piece rook = ((Piece) StackPaneUtil.getPieceFromTile(tiles[self.isWhite() ? 7 : 0][0]).getUserData());
+                if (rook.isWhite() == self.isWhite() && rook.getCol() == 0
+                        && rook.getRow() == (self.isWhite() ? 7 : 0)) { // Unmoved
+                    // TODO Validate no danger in path
+                    return true;
+                }
+            }
         }
         return false;
     }

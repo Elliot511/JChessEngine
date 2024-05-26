@@ -7,6 +7,9 @@ import org.jchessengine.MoveValidator;
 import java.util.Optional;
 
 public class King extends Piece {
+
+    boolean canCastle = true;
+
     public King(BoardDisplay board, int col, int row, boolean isWhite) {
         super(board);
         this.name = "King";
@@ -22,7 +25,15 @@ public class King extends Piece {
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
         return MoveValidator.isTurn(this) &&
                 MoveValidator.validateNoTeamKill(maybePiece, this) &&
-                MoveValidator.validateKingMovement(currentCol, currentRow, newCol, newRow) &&
+                MoveValidator.validateKingMovement(board, this, currentCol, currentRow, newCol, newRow) &&
                 !MoveValidator.isAttackedTile(board, this, newCol, newRow);
+    }
+
+    public void setCanCastle(boolean canCastle) {
+        this.canCastle = canCastle;
+    }
+
+    public boolean isCanCastle() {
+        return canCastle;
     }
 }
