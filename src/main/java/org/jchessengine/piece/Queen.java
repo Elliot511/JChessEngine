@@ -20,7 +20,8 @@ public class Queen extends Piece {
 
     @Override
     public boolean validateMove(Optional<ImageView> maybePiece, int currentCol, int currentRow, int newCol, int newRow) {
-        return MoveValidator.validateNoTeamKill(maybePiece, this) &&
+        return MoveValidator.isTurn(this) &&
+                MoveValidator.validateNoTeamKill(maybePiece, this) &&
                 (MoveValidator.validateRookMovement(board, currentCol, currentRow, newCol, newRow) ||
                 MoveValidator.validateBishopMovement(board, currentCol, currentRow, newCol, newRow));
     }

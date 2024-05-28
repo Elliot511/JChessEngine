@@ -134,8 +134,7 @@ public final class MoveValidator {
                 Piece rook = ((Piece) StackPaneUtil.getPieceFromTile(tiles[self.isWhite() ? 7 : 0][7]).getUserData());
                 if (rook.isWhite() == self.isWhite() && rook.getCol() == 7
                         && rook.getRow() == (self.isWhite() ? 7 : 0)) { // Unmoved
-                    // TODO Validate no danger in path
-                    return true;
+                    return validateCastlingPath(board, self, currentCol, 1);
                 }
             }
             return false;
@@ -145,12 +144,23 @@ public final class MoveValidator {
                 Piece rook = ((Piece) StackPaneUtil.getPieceFromTile(tiles[self.isWhite() ? 7 : 0][0]).getUserData());
                 if (rook.isWhite() == self.isWhite() && rook.getCol() == 0
                         && rook.getRow() == (self.isWhite() ? 7 : 0)) { // Unmoved
-                    // TODO Validate no danger in path
-                    return true;
+                    return validateCastlingPath(board, self, currentCol, -1);
                 }
             }
         }
         return false;
+    }
+
+    private static boolean validateCastlingPath(BoardDisplay board, Piece self, int currentCol, int direction) {
+        int startCol = currentCol + direction;
+        int endCol = currentCol + (2 * direction);
+
+        for (int i = startCol; direction < 0 ? i >= endCol : i <= endCol; i += direction) {
+            if (isAttackedTile(board, self, i, self.getRow())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isAttackedTile(BoardDisplay board, Piece self, int newCol, int newRow) {
